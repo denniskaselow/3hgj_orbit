@@ -12,3 +12,4 @@ part 'src/shared/components.dart';
 part 'src/shared/systems/logic.dart';
 
 Random random = new Random();
+Color randomColor() => new Color(random.nextInt(255), 50 + random.nextDouble() * 50, 50 + random.nextDouble());

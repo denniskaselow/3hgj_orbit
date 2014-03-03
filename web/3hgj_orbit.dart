@@ -15,12 +15,7 @@ class Game extends GameBase {
   Game() : super.noAssets('3hgj_orbit', 'canvas', 800, 600);
 
   void createEntities() {
-    addEntity([new Transform(100, 100), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(1, -1), randomColor()]);
-    addEntity([new Transform(700, 500), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(-1, 1), randomColor()]);
-    addEntity([new Transform(700, 100), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(1, 1), randomColor()]);
-    addEntity([new Transform(400, 500), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(1, 0), randomColor()]);
-    addEntity([new Transform(100, 500), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(-1, -1), randomColor()]);
-    addEntity([new Transform(400, 300), new Radius(15), new Mass(1500), new Acceleration(), new Velocity(), new Color(0, 0, 0)]);
+    addEntity([new Transform(400, 300), new Radius(25), new Mass(1500), new Acceleration(), new Velocity(), new Color(60, 100, 75)]);
   }
 
   List<EntitySystem> getSystems() {
@@ -30,9 +25,10 @@ class Game extends GameBase {
             new GravitySystem(),
             new AccelerationSystem(),
             new MovementSystem(),
-            new CanvasCleaningSystem(canvas),
+            new CanvasCleaningSystem(canvas, fillStyle: 'black'),
             new RenderingSystem(canvas),
-            new FpsRenderingSystem(ctx)
+            new FpsRenderingSystem(ctx),
+            new CircleSpawnerSystem(canvas)
     ];
   }
 
@@ -42,6 +38,5 @@ class Game extends GameBase {
   Future onInitDone() {
   }
 
-  Color randomColor() => new Color(random.nextInt(255), 50 + random.nextDouble() * 50, 50 + random.nextDouble());
 }
 
