@@ -18,6 +18,7 @@ class Game extends GameBase {
     addEntity([new Transform(100, 100), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(1, -1)]);
     addEntity([new Transform(700, 500), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(-1, 1)]);
     addEntity([new Transform(700, 100), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(1, 1)]);
+    addEntity([new Transform(400, 500), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(1, 0)]);
     addEntity([new Transform(100, 500), new Radius(10), new Mass(10), new Acceleration(), new Velocity.of(-1, -1)]);
     addEntity([new Transform(400, 300), new Radius(15), new Mass(1500), new Acceleration(), new Velocity()]);
   }

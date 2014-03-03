@@ -12,21 +12,25 @@ class GravitySystem extends EntitySystem {
   @override
   void processEntities(ReadOnlyBag<Entity> entitiesInBag) {
     var entities = new List<Entity>();
-    entitiesInBag.forEach((entity) => entities.add(entity));
+    entitiesInBag.forEach((entity) {
+      var a = am.get(entity);
+      a.acceleration = new Vector2.zero();
+      entities.add(entity);
+    });
     for (int i = 0; i < entities.length - 1; i++) {
       var entity1 = entities[i];
-      Transform t1 = tm.get(entity1);
-      Mass m1 = mm.get(entity1);
-      Acceleration a1 = am.get(entity1);
+      var t1 = tm.get(entity1);
+      var m1 = mm.get(entity1);
+      var a1 = am.get(entity1);
       for (int j = i + 1; j < entities.length; j++) {
         var entity2 = entities[j];
-        Transform t2 = tm.get(entity2);
-        Mass m2 = mm.get(entity2);
-        Acceleration a2 = am.get(entity2);
+        var t2 = tm.get(entity2);
+        var m2 = mm.get(entity2);
+        var a2 = am.get(entity2);
         var distSq = t1.pos.distanceToSquared(t2.pos);
         var force = 0.01 * m1.mass * m2.mass / distSq;
-        a1.acceleration = (t2.pos - t1.pos) * force/m1.mass;
-        a2.acceleration = (t1.pos - t2.pos) * force/m2.mass;
+        a1.acceleration += (t2.pos - t1.pos) * force/m1.mass;
+        a2.acceleration += (t1.pos - t2.pos) * force/m2.mass;
       }
     }
   }
@@ -73,12 +77,12 @@ class CollisionDetectionSystem extends EntitySystem {
     entitiesInBag.forEach((entity) => entities.add(entity));
     for (int i = 0; i < entities.length - 1; i++) {
       var entity1 = entities[i];
-      Transform t1 = tm.get(entity1);
-      Radius r1 = rm.get(entity1);
+      var t1 = tm.get(entity1);
+      var r1 = rm.get(entity1);
       for (int j = i + 1; j < entities.length; j++) {
         var entity2 = entities[j];
-        Transform t2 = tm.get(entity2);
-        Radius r2 = rm.get(entity2);
+        var t2 = tm.get(entity2);
+        var r2 = rm.get(entity2);
         if (t2.pos.distanceToSquared(t1.pos) < r1.radius * r1.radius + r2.radius * r2.radius) {
           chs.collisions.add(new Collision(entity1, entity2));
         }
@@ -100,16 +104,29 @@ class CollisionHandlingSystem extends VoidEntitySystem {
   void processSystem() {
     // there will probably be weird behavior if one entity collides with
     // mutliple entities in the same frame
-    collisions.forEach((collision) {
-      Transform t1 = tm.get(collision.entity1);
-      Transform t2 = tm.get(collision.entity2);
-      Mass m1 = mm.get(collision.entity1);
-      Mass m2 = mm.get(collision.entity2);
-      Velocity v1 = vm.get(collision.entity1);
-      Velocity v2 = vm.get(collision.entity2);
+    collisions.forEach((Collision collision) {
+      var t1 = tm.get(collision.entity1);
+      var t2 = tm.get(collision.entity2);
+      var m1 = mm.get(collision.entity1);
+      var m2 = mm.get(collision.entity2);
 
       num dx = t2.pos.x - t1.pos.x;
       num dy = t2.pos.y - t1.pos.y;
+
+      if (dx * dx + dy * dy < 80) {
+        // getting sucked in
+        if (m1.mass > m2.mass) {
+          m1.mass += m2.mass;
+          collision.entity2.deleteFromWorld();
+        } else {
+          m2.mass += m1.mass;
+          collision.entity1.deleteFromWorld();
+        }
+      }
+
+      var v1 = vm.get(collision.entity1);
+      var v2 = vm.get(collision.entity2);
+
       // collision angle
       num phi = atan2(dy, dx);
 
