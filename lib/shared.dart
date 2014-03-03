@@ -1,5 +1,7 @@
 library shared;
 
+import 'dart:math';
+
 import 'package:gamedev_helpers/gamedev_helpers_shared.dart';
 import 'package:vector_math/vector_math.dart';
 export 'package:vector_math/vector_math.dart';

@@ -1,7 +1,8 @@
 import 'package:3hgj_orbit/client.dart';
 
 @MirrorsUsed(targets: const [RenderingSystem, GravitySystem, AccelerationSystem,
-                             MovementSystem
+                             MovementSystem, CollisionDetectionSystem,
+                             CollisionHandlingSystem
                             ])
 import 'dart:mirrors';
 
@@ -23,6 +24,8 @@ class Game extends GameBase {
 
   List<EntitySystem> getSystems() {
     return [
+            new CollisionDetectionSystem(),
+            new CollisionHandlingSystem(),
             new GravitySystem(),
             new AccelerationSystem(),
             new MovementSystem(),

@@ -2,8 +2,8 @@ part of shared;
 
 
 class Transform extends Component {
-  Vector3 pos;
-  Transform(num x, num y): pos = new Vector3(x.toDouble(), y.toDouble(), 0.0);
+  Vector2 pos;
+  Transform(num x, num y): pos = new Vector2(x.toDouble(), y.toDouble());
 }
 
 class Mass extends Component {
@@ -17,13 +17,12 @@ class Radius extends Component {
 }
 
 class Acceleration extends Component {
-  Vector3 acceleration;
-  Acceleration(): this.acceleration = new Vector3.zero();
+  Vector2 acceleration;
+  Acceleration(): this.acceleration = new Vector2.zero();
 }
 
 class Velocity extends Component {
-  Vector3 velocity;
-  Velocity(): this.velocity = new Vector3.zero();
-  Velocity.of(num x, num y): velocity = new Vector3(x.toDouble(), y.toDouble(),
-      0.0);
+  Vector2 velocity;
+  Velocity(): this.velocity = new Vector2.zero();
+  Velocity.of(num x, num y): velocity = new Vector2(x.toDouble(), y.toDouble());
 }
